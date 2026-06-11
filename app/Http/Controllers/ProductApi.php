@@ -111,7 +111,7 @@ class ProductApi extends Controller
     /* lấy chi tiết sp theo id*/
 
      public function Detail($id){
-        $products = ProductModel::Where('id', $id)->with(['brand:id,name','image:id,product_id,image',
+        $products = ProductModel::Where('id', $id)->with(['brand:id,name','images:id,product_id,image',
                                                 'variants:product_id,image,price,stock,color_id,size_id',
                                                 'category:id,name',
                                                 'variants.color:id,name',
