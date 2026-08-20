@@ -16,6 +16,8 @@ use app\Models\Supplier;
 
 class ReceiptController extends Controller
 {
+
+/*nhập tay dùng form, nhiều sản phẩm*/
 public function updateStock(Request $request) {
     $request->validate([
             'type' => 'required|integer', 
@@ -105,7 +107,7 @@ public function updateStock(Request $request) {
     }
 }
 } 
-
+    /*xem log nhập/xuất kho theo biến thể sản phẩm */
     function checkReceipts($id)
     {   
             return response()->json([
@@ -114,4 +116,11 @@ public function updateStock(Request $request) {
                 'data' => ReceiptDetail::where('variant_id', $id)->with(['receipt', 'variant'])->orderBy('id', 'desc')->get()
             ], 200);
     }
+    /*nhập/xuất kho bằng excel*/
+    function importStock(Request $request)
+{  
+
 }
+
+}
+

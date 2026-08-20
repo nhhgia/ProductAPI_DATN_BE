@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class ProductApi extends Controller
+class ProductController extends Controller
 {
     /**
      * @OA\Get(
@@ -224,7 +224,7 @@ class ProductApi extends Controller
     public function Detail(string $slug)
     {
         // Nếu tham số là số nguyên → tìm theo id, ngược lại tìm theo slug
-        $query = Product::query()->with([
+        $query = Product::query()->where('status', 1)->with([
             'brand:id,name',
             'variants:id,product_id,image,price,sale,stock,color_id,size_id',
             'category:id,name',
@@ -248,7 +248,7 @@ class ProductApi extends Controller
         }
 
         $related = Product::query()->where([['id', '!=', $product->id]])
-            ->where(['category_id' => $product->category_id])
+            ->where(['category_id' => $product->category_id])->where('status', 1)
             ->limit(4)
             ->with([
                 'variants:product_id,size_id,color_id,sku,stock,price,sale,image',
@@ -296,6 +296,7 @@ class ProductApi extends Controller
     {
         $products = Product::query()
             ->select(['id', 'name', 'slug', 'sold', 'category_id', 'brand_id', 'images'])
+            ->where('status', 1)
             ->with([
                 'variants:id,product_id,size_id,color_id,sku,stock,price,sale,image',
                 'variants.color:id,name',
@@ -477,6 +478,13 @@ class ProductApi extends Controller
      *     @OA\Response(response=200, description="Xóa thành công")
      * )
      */
+    function togglestatus(int $id)
+    {
+          $product = Product::findOrFail($id);
+           $product->update(['status' => !$product->status]);
+        return response()->json(['message' => 'Cập nhật trạng thái thành công!']);
+    }
+
     public function variant_delete(Variant $v)
     {
         // Kiểm tra xem biến thể có nằm trong đơn hàng đang xử lý/giao hàng không

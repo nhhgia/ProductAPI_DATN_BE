@@ -130,6 +130,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/product/{id}', [ProductController::class, 'product_delete']);
     Route::delete('/variant/{v}', [ProductController::class, 'variant_delete']);
     Route::post('/upload', [ProductController::class, 'uploadImage']);
+    Route::patch('product/toggle-status/{id}', [ProductController::class, 'togglestatus']);
 
     // Quản lý Size (Admin & Management)
     Route::get('/size', [SizeController::class, 'index']);
